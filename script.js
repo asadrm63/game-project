@@ -36,8 +36,8 @@ let skier = {
       this.color = 'yellow';
       this.x = 200 + Math.random() * 50 - 100;
       this.y = 200 + Math.random() * 400 - 200;
-      this.w = 25;
-      this.h = 25;
+      this.w = 15;
+      this.h = 15;
       stage.push(this);
     }
   }
@@ -77,3 +77,24 @@ setInterval(draw, 1000 / FPS);
 //     // Move the skier down the slope
 //     skier.y += skier.speed;
 // }
+
+
+// ? how to make it seem like auto scroll
+      //have y increase auto
+
+// ?  need to have way of detecting if coins collected
+
+//add score 
+// add levels
+// 
+
+// add obstacles
+
+// add enemy
+
+// alternative to sking
+    // running down a mountain/pyramid
+
+
+
+// 
