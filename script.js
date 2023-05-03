@@ -1,7 +1,7 @@
-console.log("working")
-
 let canvas = document.getElementById("myCanvas")
 const ctx = canvas.getContext("2d");
+let score = 0;
+const scoreElement = document.querySelector('#score');
 
 const stage = [];
 
@@ -20,58 +20,108 @@ function drawRect(obj) {
   function clearScreen() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
-
+  // need to keep skier restricted to screen
 let skier = {
-    x: 400,
-    y: 0,
-    w:50,
-    h:75,
+    x: 90,
+    y: 20,
+    w:10,
+    h:15,
     speed: 5,
     color:"black",
-  };
+    onEnterFrame() {
+      if(skier.left) {
+        skier.x -= skier.speed
+      }
+      if(skier.right) {
+        skier.x += skier.speed
+      }
 
+    }
+  };
+// ? how to make the x cordinate of coin spread out more
 
   class Coin {
     constructor() {
       this.color = 'yellow';
-      this.x = 200 + Math.random() * 50 - 100;
+      this.x = 40 + Math.random() * 100 - -200;
       this.y = 200 + Math.random() * 400 - 200;
       this.w = 15;
-      this.h = 15;
+      this.h = 5;
       stage.push(this);
+    }
+    onEnterFrame(){
+          // can use this for moving left or right
+      // this.x -= 3;
+
+      // changed to - ,now its moving upward
+      this.y -= 3;
+      // if(this.x < -50 || this.y > 300) {
+      //   this.destroy();
+      // }
+      if(isColliding(skier, this)){
+        this.destroy();
+        score++
+        scoreElement.innerText = `Score: ${score}`;
+      }
+    }
+    destroy() {
+       stage.splice(stage.indexOf(this), 1);
     }
   }
 
-//   let mario = {
-//     x: 50,
-//     y: 175,
-//     w: 50,
-//     h: 75,
-//     color: 'red',
-//     speed: 3
-//   }
+function drawRect(obj) {
+  ctx.fillStyle = obj.color;
+  ctx.fillRect(obj.x, obj.y, obj.w, obj.h);
+}
+function clearScreen() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 
 
-  document.addEventListener('keydown', e => {
+  window.addEventListener('keydown', e => {
     if(e.key === 'ArrowLeft'){
-      skier.x -= skier.speed
+      // skier.x -= skier.speed
+      skier.left = true;
       ///?????
     } else if (e.key === 'ArrowRight'){
-      skier.x += skier.speed
+      // skier.x += skier.speed
+      skier.right =true;
     }
   })
 
-  // draw all game objects 30 times per second
-const FPS = 30;
-function draw() {
-  clearScreen();
-  if(Math.random() > .9) new Coin;
-  stage.forEach(obj => drawRect(obj));
-  drawRect(skier);
-}
+  window.addEventListener('keyup', e => {
+    if(e.key === 'ArrowLeft'){
+      // skier.x -= skier.speed
+      skier.left = false;
+      ///?????
+    } else if (e.key === 'ArrowRight'){
+      // skier.x += skier.speed
+      skier.right = false;
+    }
+  })
 
-draw();
-setInterval(draw, 1000 / FPS);
+
+  function isColliding(a, b) {
+    return a.x < b.x + b.w &&
+      a.x + a.w > b.x &&
+      a.y < b.y + b.h &&
+      a.h + a.y > b.y
+  }
+
+  // draw all game objects 30 times per second
+  const FPS = 30;
+  function draw() {
+    clearScreen();
+    if(Math.random() > .9) new Coin;
+    stage.forEach(obj => {
+      drawRect(obj);
+      obj.onEnterFrame();
+    });
+    drawRect(skier);
+    skier.onEnterFrame();
+  }
+  draw();
+  setInterval(draw, 1000 / FPS);
 
 // function updateGame() {
 //     // Move the skier down the slope
