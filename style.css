@@ -1,6 +1,7 @@
 *{
-   /* margin: 0; */
-   padding:0;    
+   /* margin-top: 0; */
+   padding:0;   
+   border: 1px solid red; 
 }
 
 canvas{
@@ -13,6 +14,10 @@ background-color: pink;
 #score {
  position:absolute;
 }
+
+#speed {
+   position:absolute;
+  }
 
 body{
    background-color:green;

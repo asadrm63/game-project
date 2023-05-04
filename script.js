@@ -40,11 +40,47 @@ let skier = {
   };
 // ? how to make the x cordinate of coin spread out more
 
+
+class Tree {
+  constructor() {
+    this.color = 'green';
+    this.x = randomInteger(7.5, 792.5)
+    this.y =400
+    this.w = 15;
+    this.h = 34;
+    stage.push(this);
+  }
+  onEnterFrame(){
+        // can use this for moving left or right
+    // this.x -= 3;
+
+    // changed to - ,now its moving upward
+    this.y -=3;
+    // if(this.x < -50 || this.y > 300) {
+    //   this.destroy();
+    // }
+    if(isColliding(skier, this)){
+      // this.destroy();
+      this.y +=3 ;
+      //change speed when colliding
+  0    // scoreElement.innerText = `Score: ${score}`;
+    }
+  }
+  destroy() {
+     stage.splice(stage.indexOf(this), 1);
+  }
+}
+function randomInteger(min, max) {
+   return Math.floor(Math.random() * (max - min + 1)) + min;
+   }
+
+
   class Coin {
     constructor() {
       this.color = 'yellow';
-      this.x = 40 + Math.random() * 100 - -200;
-      this.y = 200 + Math.random() * 400 - 200;
+      this.x = randomInteger(0, 800)
+      this.y =400
+      //  200 + Math.random() * 400 - 200;
       this.w = 15;
       this.h = 5;
       stage.push(this);
@@ -105,14 +141,14 @@ function clearScreen() {
     return a.x < b.x + b.w &&
       a.x + a.w > b.x &&
       a.y < b.y + b.h &&
-      a.h + a.y > b.y
+      a.h + a.y > b.y 
   }
 
   // draw all game objects 30 times per second
   const FPS = 30;
   function draw() {
     clearScreen();
-    if(Math.random() > .9) new Coin;
+    if(Math.random() > .9) new Coin, new Tree;
     stage.forEach(obj => {
       drawRect(obj);
       obj.onEnterFrame();
