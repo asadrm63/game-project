@@ -7,10 +7,15 @@ const stage = [];
 
 
 // ctx.beginPath();
-// ctx.rect(20, 40, 12, 40);
+// ctx.rect(20, 40, 12, 40);x
 // ctx.fillStyle = "#FF0000";
 // ctx.fill();
 // ctx.closePath();
+
+function randomInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
 
 function drawRect(obj) {
     ctx.fillStyle = obj.color;
@@ -23,7 +28,7 @@ function drawRect(obj) {
   // need to keep skier restricted to screen
 let skier = {
     x: 90,
-    y: 20,
+    y: 200,
     w:10,
     h:15,
     speed: 5,
@@ -31,14 +36,32 @@ let skier = {
     onEnterFrame() {
       if(skier.left) {
         skier.x -= skier.speed
+        stage.forEach((item) => (item.x += 3));
+        
       }
       if(skier.right) {
         skier.x += skier.speed
+        stage.forEach((item) => (item.x -= 3));
+      }
+
+      // keeps skier in frame
+      if (skier.x  > 750 ) {
+        skier.x = 750
+      }
+
+      if (skier.x  <50 ) {
+        skier.x = 50
       }
 
     }
   };
+
+
+  // ? How do u win this game ?
+  // have timer must get 100 points in 2 mins || must travel cetain distance in time 
+  // ?how to increase score coins, lose score
 // ? how to make the x cordinate of coin spread out more
+//  have enemies, hwo would approch 
 
 
 class Tree {
@@ -46,8 +69,8 @@ class Tree {
     this.color = 'green';
     this.x = randomInteger(7.5, 792.5)
     this.y =400
-    this.w = 15;
-    this.h = 34;
+    this.w = randomInteger(10, 30);
+    this.h = randomInteger(10, 60);
     stage.push(this);
   }
   onEnterFrame(){
@@ -56,24 +79,78 @@ class Tree {
 
     // changed to - ,now its moving upward
     this.y -=3;
-    // if(this.x < -50 || this.y > 300) {
-    //   this.destroy();
-    // }
+
     if(isColliding(skier, this)){
-      // this.destroy();
-      this.y +=3 ;
-      //change speed when colliding
-  0    // scoreElement.innerText = `Score: ${score}`;
-    }
-  }
-  destroy() {
-     stage.splice(stage.indexOf(this), 1);
+      console.log(stage)
+      // pauses screen when colliding
+      stage.forEach((item) => (item.y += 3));
+      --score 
+      }
   }
 }
-function randomInteger(min, max) {
-   return Math.floor(Math.random() * (max - min + 1)) + min;
-   }
 
+
+
+
+class Enemy {
+  constructor() {
+    this.color = 'red';
+    this.x = randomInteger(7.5, 792.5)
+    this.y =0
+    this.w = 10;
+    this.h = 15;
+    stage.push(this);
+  }
+  onEnterFrame(){
+        // can use this for moving left or right
+    // this.x -= 3;
+
+    // changed to - ,now its moving upward
+    this.y +=.05;
+
+    if(isColliding(skier, this)){
+      console.log(stage)
+      // pauses screen when colliding
+      stage.forEach((item) => (item.y += 3));
+      }
+  }
+}
+
+
+// let enemy = {
+//   x: 100,  // starting x position
+//   y: 100,  // starting y position
+//   speed: 2,  // movement speed
+//   follow: function(target) {
+//     // calculate direction vector towards target
+//     let dx = target.x - this.x;
+//     let dy = target.y - this.y;
+//     let len = Math.sqrt(dx*dx + dy*dy);
+//     dx /= len;
+//     dy /= len;
+    
+//     // move towards target
+//     this.x += dx * this.speed;
+//     this.y += dy * this.speed;
+//   }
+// };
+
+// function animate() {
+//   requestAnimationFrame(animate);
+
+//   // update character position
+
+//   // draw character on canvas
+
+//   // update enemy position
+//   enemy.follow(skier);
+
+//   // draw enemy on canvas
+//   context.fillStyle = 'red';
+//   context.fillRect(enemy.x, enemy.y, 20, 20);
+// }
+
+// animate();
 
   class Coin {
     constructor() {
@@ -121,7 +198,7 @@ function clearScreen() {
       ///?????
     } else if (e.key === 'ArrowRight'){
       // skier.x += skier.speed
-      skier.right =true;
+      skier.right =true;x
     }
   })
 
@@ -148,7 +225,16 @@ function clearScreen() {
   const FPS = 30;
   function draw() {
     clearScreen();
-    if(Math.random() > .9) new Coin, new Tree;
+
+
+    if(Math.random() > .9) new Coin, new Enemy;
+    stage.forEach(obj => {
+      drawRect(obj);
+      obj.onEnterFrame();
+    });
+
+
+    if(Math.random() > .9 && !(isColliding(skier, Tree)))  new Tree;
     stage.forEach(obj => {
       drawRect(obj);
       obj.onEnterFrame();
@@ -157,30 +243,12 @@ function clearScreen() {
     skier.onEnterFrame();
   }
   draw();
-  setInterval(draw, 1000 / FPS);
+  let gameLoop = setInterval(draw, 1000 / FPS);
 
 // function updateGame() {
 //     // Move the skier down the slope
 //     skier.y += skier.speed;
 // }
-
-
-// ? how to make it seem like auto scroll
-      //have y increase auto
-
-// ?  need to have way of detecting if coins collected
-
-//add score 
 // add levels
 // 
-
-// add obstacles
-
 // add enemy
-
-// alternative to sking
-    // running down a mountain/pyramid
-
-
-
-// 

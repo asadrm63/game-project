@@ -4,11 +4,15 @@
    border: 1px solid red; 
 }
 
+body{
+   background-color:black;
+}
 canvas{
 border: 1px solid black;
 width:780px;
 height:720px;
-background-color: pink;
+background-color: whitesmoke;
+justify-content: center;
 }
 
 #score {
@@ -19,6 +23,3 @@ background-color: pink;
    position:absolute;
   }
 
-body{
-   background-color:green;
-}
