@@ -6,6 +6,7 @@
 
 body{
    /* background-color:black; */
+   background-image: url('snowbackground.avif');
    margin: 0;
    display: flex;
    align-items: center;
@@ -20,12 +21,25 @@ background-color: whitesmoke;
 justify-content: center;
 }
 
-#score {
- position:absolute;
- /* flex-direction: column; */
- /* position: fixed; */
-
-}
+.game-timer {
+   position: absolute;
+   top: 0;
+   left: 50%;
+   /* transform: translateX(-50%); */
+   font-size: 24px;
+   font-weight: bold;
+   color: black;
+ }
+ 
+ #score {
+   position: absolute;
+   top: 0;
+   right: 0;
+   font-size: 24px;
+   font-weight: bold;
+   color: black;
+ }
+ 
 
 #speed {
    position:absolute;
